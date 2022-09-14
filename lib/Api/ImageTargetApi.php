@@ -32,11 +32,15 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
+use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use InvalidArgumentException;
 use OpenAPI\Client\ApiException;
 use OpenAPI\Client\Configuration;
 use OpenAPI\Client\HeaderSelector;
+use OpenAPI\Client\Model\CreateImageTargetsBody;
+use OpenAPI\Client\Model\CreateImageTargetsResponse;
 use OpenAPI\Client\ObjectSerializer;
 
 /**
@@ -70,10 +74,10 @@ class ImageTargetApi
     protected $hostIndex;
 
     /**
-     * @param ClientInterface $client
-     * @param Configuration   $config
-     * @param HeaderSelector  $selector
-     * @param int             $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
+     * @param ClientInterface|null $client
+     * @param Configuration|null $config
+     * @param HeaderSelector|null $selector
+     * @param int $hostIndex (Optional) host index to select the list of hosts if defined in the OpenAPI spec
      */
     public function __construct(
         ClientInterface $client = null,
@@ -120,19 +124,19 @@ class ImageTargetApi
      *
      * Create Image Targets
      *
-     * @param  string $x_version The version of the API to be used. Must be set to 3. (required)
-     * @param  string $x_token Your Manager Token. (required)
-     * @param  string $content_type The Content Type of the body. Must be set to application/json. (required)
-     * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
-     * @param  \OpenAPI\Client\Model\CreateImageTargetsBody[] $create_image_targets_body create_image_targets_body (optional)
+     * @param string $x_version The version of the API to be used. Must be set to 3. (required)
+     * @param string $x_token Your Manager Token. (required)
+     * @param string $content_type The Content Type of the body. Must be set to application/json. (required)
+     * @param string $tc_id Unique identifier of the Image Target Collection. (required)
+     * @param CreateImageTargetsBody[]|null $create_image_targets_body create_image_targets_body (optional)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Client\Model\CreateImageTargetsResponse
+     * @return CreateImageTargetsResponse
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
-    public function createImageTargets($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null)
+    public function createImageTargets(string $x_version, string $x_token, string $content_type, string $tc_id, array $create_image_targets_body = null): CreateImageTargetsResponse
     {
-        list($response) = $this->createImageTargetsWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body);
+        [$response] = $this->createImageTargetsWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body);
         return $response;
     }
 
@@ -145,13 +149,13 @@ class ImageTargetApi
      * @param  string $x_token Your Manager Token. (required)
      * @param  string $content_type The Content Type of the body. Must be set to application/json. (required)
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
-     * @param  \OpenAPI\Client\Model\CreateImageTargetsBody[] $create_image_targets_body (optional)
+     * @param  CreateImageTargetsBody[] $create_image_targets_body (optional)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\CreateImageTargetsResponse, HTTP status code, HTTP response headers (array of strings)
+     * @throws InvalidArgumentException
+     * @throws ApiException|\GuzzleHttp\Exception\GuzzleException on non-2xx response
      */
-    public function createImageTargetsWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null)
+    public function createImageTargetsWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null): array
     {
         $request = $this->createImageTargetsRequest($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body);
 
@@ -237,9 +241,9 @@ class ImageTargetApi
      * @param  string $x_token Your Manager Token. (required)
      * @param  string $content_type The Content Type of the body. Must be set to application/json. (required)
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
-     * @param  \OpenAPI\Client\Model\CreateImageTargetsBody[] $create_image_targets_body (optional)
+     * @param  CreateImageTargetsBody[] $create_image_targets_body (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createImageTargetsAsync($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null)
@@ -261,9 +265,9 @@ class ImageTargetApi
      * @param  string $x_token Your Manager Token. (required)
      * @param  string $content_type The Content Type of the body. Must be set to application/json. (required)
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
-     * @param  \OpenAPI\Client\Model\CreateImageTargetsBody[] $create_image_targets_body (optional)
+     * @param  CreateImageTargetsBody[] $create_image_targets_body (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function createImageTargetsAsyncWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null)
@@ -312,34 +316,34 @@ class ImageTargetApi
      * @param  string $x_token Your Manager Token. (required)
      * @param  string $content_type The Content Type of the body. Must be set to application/json. (required)
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
-     * @param  \OpenAPI\Client\Model\CreateImageTargetsBody[] $create_image_targets_body (optional)
+     * @param  CreateImageTargetsBody[] $create_image_targets_body (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function createImageTargetsRequest($x_version, $x_token, $content_type, $tc_id, $create_image_targets_body = null)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling createImageTargets'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling createImageTargets'
             );
         }
         // verify the required parameter 'content_type' is set
         if ($content_type === null || (is_array($content_type) && count($content_type) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $content_type when calling createImageTargets'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling createImageTargets'
             );
         }
@@ -413,7 +417,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -429,7 +433,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -448,9 +452,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return void
+     * @throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function deleteImageTarget($x_version, $x_token, $tc_id, $target_id)
     {
@@ -467,9 +471,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of null, HTTP status code, HTTP response headers (array of strings)
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function deleteImageTargetWithHttpInfo($x_version, $x_token, $tc_id, $target_id)
     {
@@ -522,7 +526,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteImageTargetAsync($x_version, $x_token, $tc_id, $target_id)
@@ -545,7 +549,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function deleteImageTargetAsyncWithHttpInfo($x_version, $x_token, $tc_id, $target_id)
@@ -584,32 +588,32 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function deleteImageTargetRequest($x_version, $x_token, $tc_id, $target_id)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling deleteImageTarget'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling deleteImageTarget'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling deleteImageTarget'
             );
         }
         // verify the required parameter 'target_id' is set
         if ($target_id === null || (is_array($target_id) && count($target_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $target_id when calling deleteImageTarget'
             );
         }
@@ -681,7 +685,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -697,7 +701,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'DELETE',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -716,9 +720,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\ImageTargetResponse
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function getImageTarget($x_version, $x_token, $tc_id, $target_id)
     {
@@ -736,9 +740,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\ImageTargetResponse, HTTP status code, HTTP response headers (array of strings)
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function getImageTargetWithHttpInfo($x_version, $x_token, $tc_id, $target_id)
     {
@@ -827,7 +831,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetAsync($x_version, $x_token, $tc_id, $target_id)
@@ -850,7 +854,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetAsyncWithHttpInfo($x_version, $x_token, $tc_id, $target_id)
@@ -900,32 +904,32 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $target_id Unique identifier of the Image Target. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getImageTargetRequest($x_version, $x_token, $tc_id, $target_id)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling getImageTarget'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling getImageTarget'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling getImageTarget'
             );
         }
         // verify the required parameter 'target_id' is set
         if ($target_id === null || (is_array($target_id) && count($target_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $target_id when calling getImageTarget'
             );
         }
@@ -997,7 +1001,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -1013,7 +1017,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1032,9 +1036,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $generation_id Unique identifier of the asynchronous job created by a generation endpoint. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
-     * @return \OpenAPI\Client\Model\CreateImageTargetsResponse
+     * @return CreateImageTargetsResponse
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function getImageTargetStatus($x_version, $x_token, $tc_id, $generation_id)
     {
@@ -1052,9 +1056,9 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $generation_id Unique identifier of the asynchronous job created by a generation endpoint. (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\CreateImageTargetsResponse, HTTP status code, HTTP response headers (array of strings)
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function getImageTargetStatusWithHttpInfo($x_version, $x_token, $tc_id, $generation_id)
     {
@@ -1143,7 +1147,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $generation_id Unique identifier of the asynchronous job created by a generation endpoint. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetStatusAsync($x_version, $x_token, $tc_id, $generation_id)
@@ -1166,7 +1170,7 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $generation_id Unique identifier of the asynchronous job created by a generation endpoint. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetStatusAsyncWithHttpInfo($x_version, $x_token, $tc_id, $generation_id)
@@ -1216,32 +1220,32 @@ class ImageTargetApi
      * @param  string $tc_id Unique identifier of the Image Target Collection. (required)
      * @param  string $generation_id Unique identifier of the asynchronous job created by a generation endpoint. (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getImageTargetStatusRequest($x_version, $x_token, $tc_id, $generation_id)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling getImageTargetStatus'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling getImageTargetStatus'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling getImageTargetStatus'
             );
         }
         // verify the required parameter 'generation_id' is set
         if ($generation_id === null || (is_array($generation_id) && count($generation_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $generation_id when calling getImageTargetStatus'
             );
         }
@@ -1313,7 +1317,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -1329,7 +1333,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1353,9 +1357,9 @@ class ImageTargetApi
      * @param  string $s The search string to look for in target names. (optional)
      * @param  bool $add_has_augmentations Add the hasAugmentations property. (optional)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\ImageTargetResponse[]
+     *@throws ApiException on non-2xx response
+     * @throws InvalidArgumentException
      */
     public function getImageTargets($x_version, $x_token, $tc_id, $sortby = null, $sortorder = null, $skip = null, $limit = null, $s = null, $add_has_augmentations = null)
     {
@@ -1378,9 +1382,9 @@ class ImageTargetApi
      * @param  string $s The search string to look for in target names. (optional)
      * @param  bool $add_has_augmentations Add the hasAugmentations property. (optional)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\ImageTargetResponse[], HTTP status code, HTTP response headers (array of strings)
+     *@throws ApiException on non-2xx response
+     * @throws InvalidArgumentException
      */
     public function getImageTargetsWithHttpInfo($x_version, $x_token, $tc_id, $sortby = null, $sortorder = null, $skip = null, $limit = null, $s = null, $add_has_augmentations = null)
     {
@@ -1474,7 +1478,7 @@ class ImageTargetApi
      * @param  string $s The search string to look for in target names. (optional)
      * @param  bool $add_has_augmentations Add the hasAugmentations property. (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetsAsync($x_version, $x_token, $tc_id, $sortby = null, $sortorder = null, $skip = null, $limit = null, $s = null, $add_has_augmentations = null)
@@ -1502,7 +1506,7 @@ class ImageTargetApi
      * @param  string $s The search string to look for in target names. (optional)
      * @param  bool $add_has_augmentations Add the hasAugmentations property. (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function getImageTargetsAsyncWithHttpInfo($x_version, $x_token, $tc_id, $sortby = null, $sortorder = null, $skip = null, $limit = null, $s = null, $add_has_augmentations = null)
@@ -1557,26 +1561,26 @@ class ImageTargetApi
      * @param  string $s The search string to look for in target names. (optional)
      * @param  bool $add_has_augmentations Add the hasAugmentations property. (optional)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function getImageTargetsRequest($x_version, $x_token, $tc_id, $sortby = null, $sortorder = null, $skip = null, $limit = null, $s = null, $add_has_augmentations = null)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling getImageTargets'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling getImageTargets'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling getImageTargets'
             );
         }
@@ -1682,7 +1686,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -1698,7 +1702,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'GET',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
@@ -1719,9 +1723,9 @@ class ImageTargetApi
      * @param  string $target_id Unique identifier of the Image Target. (required)
      * @param  \OpenAPI\Client\Model\UpdateImageTargetBody $update_image_target_body update_image_target_body (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\ImageTargetResponse
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function updateImageTarget($x_version, $x_token, $content_type, $tc_id, $target_id, $update_image_target_body)
     {
@@ -1741,9 +1745,9 @@ class ImageTargetApi
      * @param  string $target_id Unique identifier of the Image Target. (required)
      * @param  \OpenAPI\Client\Model\UpdateImageTargetBody $update_image_target_body (required)
      *
-     * @throws \OpenAPI\Client\ApiException on non-2xx response
-     * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\ImageTargetResponse, HTTP status code, HTTP response headers (array of strings)
+     *@throws InvalidArgumentException
+     * @throws ApiException on non-2xx response
      */
     public function updateImageTargetWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $target_id, $update_image_target_body)
     {
@@ -1834,7 +1838,7 @@ class ImageTargetApi
      * @param  string $target_id Unique identifier of the Image Target. (required)
      * @param  \OpenAPI\Client\Model\UpdateImageTargetBody $update_image_target_body (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function updateImageTargetAsync($x_version, $x_token, $content_type, $tc_id, $target_id, $update_image_target_body)
@@ -1859,7 +1863,7 @@ class ImageTargetApi
      * @param  string $target_id Unique identifier of the Image Target. (required)
      * @param  \OpenAPI\Client\Model\UpdateImageTargetBody $update_image_target_body (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
     public function updateImageTargetAsyncWithHttpInfo($x_version, $x_token, $content_type, $tc_id, $target_id, $update_image_target_body)
@@ -1911,44 +1915,44 @@ class ImageTargetApi
      * @param  string $target_id Unique identifier of the Image Target. (required)
      * @param  \OpenAPI\Client\Model\UpdateImageTargetBody $update_image_target_body (required)
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
     public function updateImageTargetRequest($x_version, $x_token, $content_type, $tc_id, $target_id, $update_image_target_body)
     {
         // verify the required parameter 'x_version' is set
         if ($x_version === null || (is_array($x_version) && count($x_version) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_version when calling updateImageTarget'
             );
         }
         // verify the required parameter 'x_token' is set
         if ($x_token === null || (is_array($x_token) && count($x_token) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $x_token when calling updateImageTarget'
             );
         }
         // verify the required parameter 'content_type' is set
         if ($content_type === null || (is_array($content_type) && count($content_type) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $content_type when calling updateImageTarget'
             );
         }
         // verify the required parameter 'tc_id' is set
         if ($tc_id === null || (is_array($tc_id) && count($tc_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $tc_id when calling updateImageTarget'
             );
         }
         // verify the required parameter 'target_id' is set
         if ($target_id === null || (is_array($target_id) && count($target_id) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $target_id when calling updateImageTarget'
             );
         }
         // verify the required parameter 'update_image_target_body' is set
         if ($update_image_target_body === null || (is_array($update_image_target_body) && count($update_image_target_body) === 0)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter $update_image_target_body when calling updateImageTarget'
             );
         }
@@ -2030,7 +2034,7 @@ class ImageTargetApi
 
             } else {
                 // for HTTP post (form)
-                $httpBody = \GuzzleHttp\Psr7\build_query($formParams);
+                $httpBody = Query::build($formParams);
             }
         }
 
@@ -2046,7 +2050,7 @@ class ImageTargetApi
             $headers
         );
 
-        $query = \GuzzleHttp\Psr7\build_query($queryParams);
+        $query = Query::build($queryParams);
         return new Request(
             'POST',
             $this->config->getHost() . $resourcePath . ($query ? "?{$query}" : ''),
