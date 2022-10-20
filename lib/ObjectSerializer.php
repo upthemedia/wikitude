@@ -332,6 +332,9 @@ class ObjectSerializer
 
         /** @psalm-suppress ParadoxicalCondition */
         if (in_array($class, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)) {
+            if(is_object($data) && $class==="string"){
+                return $data;
+            }
             settype($data, $class);
             return $data;
         }
